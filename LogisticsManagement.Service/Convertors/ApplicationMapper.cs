@@ -26,8 +26,9 @@ namespace LogisticsManagement.Service.Convertors
             CreateMap<Warehouse, WarehouseDTO>()
                  .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name))
                  .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.City.State.Name))
-                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.City.State.Country.Name))
-                 .ReverseMap();
+                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.City.State.Country.Name));
+
+               CreateMap<WarehouseDTO, Warehouse>();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace LogisticsManagement.WebAPI.Controllers
             {
                 if (id <= 0 || !Enum.IsDefined(typeof(UserRoles), id))
                 {
-                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, null, "Please enter valid role"));
+                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, null, error:"Please enter valid role"));
                 }
 
                 var users = await _adminService.GetUsersByRoleAsync(id);
@@ -57,7 +57,7 @@ namespace LogisticsManagement.WebAPI.Controllers
         }
 
         // Get User by id
-        [HttpGet("  {id}", Name = "GetUser")]
+        [HttpGet("{id}", Name = "GetUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -69,7 +69,7 @@ namespace LogisticsManagement.WebAPI.Controllers
             {
                 if (id <= 0)
                 {
-                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, null, "Please enter valid id"));
+                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, null, error:"Please enter valid id"));
                 }
                 var user = await _adminService.GetUserByIdAsync(id);
                 if (user == null)
@@ -107,7 +107,7 @@ namespace LogisticsManagement.WebAPI.Controllers
                 var users = await _adminService.GetPendingUsersByRoleAsync(id);
                 if (users.Count > 0)
                 {
-                    return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, users));
+                    return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, data:users));
                 }
                 return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, Enumerable.Empty<UserDTO>(), string.Empty));
 
@@ -147,20 +147,20 @@ namespace LogisticsManagement.WebAPI.Controllers
 
                 if (response == -1)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, "Failed to update user's sign-up request. Please try again later"));
+                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError,error: "Failed to update user's sign-up request. Please try again later"));
                 }
                 return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, data: "User's status updated successfully"));
 
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, ex.Message));
+                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, error:ex.Message));
             }
 
         }
 
         //Delete user by making i inactive
-        [HttpPut("deactivate/{userId}", Name = "DeactivateUser")]
+        [HttpDelete("deactivate/{userId}", Name = "DeactivateUser")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -180,14 +180,14 @@ namespace LogisticsManagement.WebAPI.Controllers
                 }
                 if (response == -1)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, "Failed to delete user. Please try again later"));
+                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, error: "Failed to delete user. Please try again later"));
                 }
                 return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, data: "User deleted successfully"));
 
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, ex.Message));
+                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, error: ex.Message));
             }
         }
 
@@ -213,14 +213,14 @@ namespace LogisticsManagement.WebAPI.Controllers
                     return NotFound(ApiResponseHelper.Response(false, HttpStatusCode.NotFound, error: "Manager or Warehouse with given id not found"));
                 if (response == -1)
 
-                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, "Failed to Assign Manager to warehouse. Please try again later"));
+                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, error: "Failed to Assign Manager to warehouse. Please try again later"));
 
                 return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK, data: "Manager assigned to warehouse successfully"));
 
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, ex.Message));
+                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError, error: ex.Message));
             }
         }
 
