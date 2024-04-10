@@ -151,53 +151,53 @@ namespace LogisticsManagement.WebAPI.Controllers
             }
         }
 
-        [HttpPatch("{id}", Name = "UpdateWarehousePartial")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateWarehousePartial(int id, [FromBody] JsonPatchDocument<WarehouseDTO> warehouse)
-        {
-            try
-            {
-                if (warehouse == null || !ModelState.IsValid)
-                {
-                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, error: "Please enter valid data"));
-                }
-                if (id <= 0)
-                {
-                    return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, error: "Invalid warehouse ID provided."));
-                }
+        //[HttpPatch("{id}", Name = "UpdateWarehousePartial")]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<IActionResult> UpdateWarehousePartial(int id, [FromBody] JsonPatchDocument<WarehouseDTO> warehouse)
+        //{
+        //    try
+        //    {
+        //        if (warehouse == null || !ModelState.IsValid)
+        //        {
+        //            return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, error: "Please enter valid data"));
+        //        }
+        //        if (id <= 0)
+        //        {
+        //            return BadRequest(ApiResponseHelper.Response(false, HttpStatusCode.BadRequest, error: "Invalid warehouse ID provided."));
+        //        }
 
-                var existingWarehouse = await _adminService.GetWarehouseByIdAsync(id);
+        //        WarehouseDTO? existingWarehouse = await _adminService.GetWarehouseByIdAsync(id);
 
 
-                if (existingWarehouse == null)
-                {
-                    return NotFound(ApiResponseHelper.Response(false, HttpStatusCode.NotFound,error: "Warehouse not found."));
-                }
+        //        if (existingWarehouse == null)
+        //        {
+        //            return NotFound(ApiResponseHelper.Response(false, HttpStatusCode.NotFound,error: "Warehouse not found."));
+        //        }
 
-                warehouse.ApplyTo(existingWarehouse);
+        //        warehouse.ApplyTo(existingWarehouse,ModelState);
 
-                var result = await _adminService.UpdateWarehousePatchAsync(existingWarehouse);
+        //        var result = await _adminService.UpdateWarehousePatchAsync(existingWarehouse);
                
-                if (result == 0)
-                {
-                    return NotFound(ApiResponseHelper.Response(false, HttpStatusCode.NotFound, error: "Warehouse with given id not found"));
-                }
+        //        if (result == 0)
+        //        {
+        //            return NotFound(ApiResponseHelper.Response(false, HttpStatusCode.NotFound, error: "Warehouse with given id not found"));
+        //        }
 
-                if (result == -1)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError,error: "Failed to update warehouse."));
-                }
+        //        if (result == -1)
+        //        {
+        //            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError,error: "Failed to update warehouse."));
+        //        }
 
-                return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK,data: "Warehouse updated successfully."));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError,error: "Internal server error: " + ex.Message));
-            }
-        }
+        //        return Ok(ApiResponseHelper.Response(true, HttpStatusCode.OK,data: "Warehouse updated successfully."));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ApiResponseHelper.Response(false, HttpStatusCode.InternalServerError,error: "Internal server error: " + ex.Message));
+        //    }
+        //}
 
         [HttpDelete("{id}", Name = "DeleteWarehouse")]
         [ProducesResponseType(StatusCodes.Status200OK)]
